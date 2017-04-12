@@ -1,0 +1,35 @@
+<!--signin page-->
+doctype html
+html
+	head
+		include ./partials/header
+	body
+		.container
+			.row
+				.header(style='height:100px;')
+					h2.text-center(style='line-height: 100px') 欢迎登录
+				.setting-btn
+					a.btn.btn-default(href='/signup') 注册
+
+				.col-md-2
+				.col-md-8
+					.flash-message
+						if success
+							.alert.alert-success.alert-dismissible.fade.in(role='alert')
+								button.close(type='button', data-dismiss='alert', aria-label='Close')
+									span(aria-hidden='true') &times;
+								p #{success}
+						if error
+							.alert.alert-danger.alert-dismissible.fade.in(role='alert')
+								button.close(type='button', data-dismiss='alert', aria-label='Close')
+									span(aria-hidden='true') &times;
+								p #{error}
+					form(method='post', enctype='multipart/form-data')
+						.form-group
+							label(for='username') 用户名
+							input#username.form-control(name='username', type='text', placeholder='请输入您的用户名', required)
+						.form-group
+							label(for='password') 密码
+							input#password.form-control(name='password', type='password', placeholder='请输入您的密码', required)
+						button.btn.btn-success.btn-block(type='submit') 登录
+		include ./partials/footer

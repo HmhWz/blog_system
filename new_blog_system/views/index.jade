@@ -1,0 +1,49 @@
+<!--首页-->
+doctype html
+html
+	head
+		include ./partials/header
+	body
+		.header(style='height:100px;')
+			h1.text-center(style='font-family: Monospace; line-height: 100px;') WELCOME TO&nbsp;
+				span(style='font-family: Arial; font-style: italic;') Free blog
+		if user
+			.setting-btn
+				.btn-group
+					button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') option
+						span.caret
+					ul.dropdown-menu
+						li: a(href='/user?id='+ user._id) 个人主页
+						li: a(href='/newblog') 发表文章
+						li: a(href='/signout') 登出
+		else
+			.setting-btn
+				.btn-group
+					button.btn.btn-default.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') sign
+						span.caret
+					ul.dropdown-menu
+						li: a(href='/signin') 登录
+						li: a(href='/signup' target='_blank') 注册
+		each blog in blogs
+			.sep-div(style='height: 10px;')
+			.container
+				.row
+					.col-md-3
+						.dropdown.avatar
+							a(href='/user?id=#{blog.authorId._id}')
+								img.avatar(src='/images/#{blog.authorId.avatar}')
+							.dropdown-content
+								p.title #{blog.authorId.username}&nbsp;&nbsp;&nbsp;#{({m: '男', f: '女', s: '保密'})[blog.authorId.sex]}
+								.bio 
+								h6(style='font-style: italic; font-weight: bold;') 个人简介:
+								span #{blog.authorId.bio}
+					.col-md-6
+						.blog-frame
+							h3.title: a(href='/blog/#{blog._id}') #{blog.title}
+							p.content #{blog.content}
+							.footer-tag
+								span.tag.left 发布时间 #{blog.createAt}
+								span.tag.right 留言(#{blog.commentCount})
+								span.tag.right 浏览(#{blog.pv})
+		.footer-div(style='height:100px;')
+		include ./partials/footer

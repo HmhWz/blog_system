@@ -1,0 +1,77 @@
+<!--特定文章页-->
+doctype html
+html
+	head
+		include ./partials/header
+		link(rel='stylesheet', href='/css/blog.css')
+	body
+		.header(style='height:100px;')
+			h1.text-center #{blog.title}
+		if user
+			.setting-btn
+				.btn-group
+					button.btn.btn-success.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') option
+						span.caret
+					ul.dropdown-menu
+						li: a(href='/user?id='+ user._id) 个人主页
+						li: a(href='/newblog') 发表文章
+						li: a(href='/') 首页
+						li: a(href='/signout') 登出 
+		else
+			.setting-btn
+				.btn-group
+					button.btn.btn-primary.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') sign
+						span.caret
+					ul.dropdown-menu
+						li: a(href='/') 回到首页
+						li: a(href='/signin') 登录
+						li: a(href='/signup' target='_blank') 注册
+		.flash-message
+			if success
+				.col-md-3
+				.col-md-6
+					.alert.alert-success.alert-dismissible.fade.in(role='alert')
+						button.close(type='button', data-dismiss='alert', aria-label='Close')
+							span(aria-hidden='true') &times;
+						p #{success}
+		.container
+			.row
+				.col-md-3
+					a.avatar(href='/user?id=#{blog.authorId._id}')
+						img.avatar(src='/images/#{blog.authorId.avatar}')
+				.col-md-6
+					.blog-frame
+						h3.title(style='color: #9B30FF;') #{blog.title}
+						p.content #{blog.content}
+						.footer-tag
+							span.tag.left 发布时间 #{blog.createAt}
+							span.tag.right 留言(#{blog.commentCount})
+							span.tag.right 浏览(#{blog.pv})
+		.sep(style='height: 30px;')
+		.container
+			.row
+				.col-md-3
+				.col-md-6
+					.comment-frame
+						h4.comment-title(style='font-weight: bold;') 留言板
+						hr
+						each comment in comments
+							#comment-div
+								span.sm-avatar
+									img.sm-avatar(src='/images/#{comment.authorId.avatar}')
+								#content
+									#title
+										a.title(href='/user?id=#{comment.authorId._id}') #{comment.authorId.username}
+										span.date #{comment.createAt}
+									#comment_content(style='color: #EEAD0E;')
+										span #{comment.content}
+						if user
+							form(method='post', enctype='multipart/form-data', action='/blog/#{blog._id}/comment')
+								.form-group
+									textarea.to-comment.form-control(rows='8', name='comment_content', placeholder='写下您对作者的留言吧。。。。' required)
+								button.comment-btn.btn.btn-success(type='submit') 留言
+						else
+							span.text-center(style='font-size: 20px;') 您需要先登录才能留言
+							a(href='/signin', style='font-size: 14px; margin-left: 30px;') 去登录
+		.footer-div(style='height:100px;')
+		include ./partials/footer

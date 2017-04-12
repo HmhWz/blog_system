@@ -1,0 +1,68 @@
+<!--用户主页-->
+doctype html
+html
+	head
+		include ./partials/header
+		link(rel='stylesheet', href='/css/user.css')
+	body(style='background: #FFE1FF;')
+		.header
+			h1.text-center 
+				span(style='font-weight: bold;') #{author.username}'s 
+				span 个人主页
+			//用户本人
+		if isAuthor
+			.setting-btn
+				.btn-group
+					button.btn.btn-success.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') option
+						span.caret
+					ul.dropdown-menu
+						li: a(href='/newblog') 发表文章
+						li: a(href='/') 首页
+						li: a(href='/edit', target='_blank') 编辑资料
+						li: a(href='/signout') 登出
+			//已登录用户,非本人
+		else if user
+			.setting-btn
+				.btn-group
+					button.btn.btn-success.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') option
+						span.caret
+					ul.dropdown-menu
+						li: a(href='/newblog') 发表文章
+						li: a(href='/') 首页
+						li: a(href='/signout') 登出
+			//未登录用户
+		else
+			.setting-btn
+				.btn-group
+					button.btn.btn-primary.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') sign
+						span.caret
+					ul.dropdown-menu
+						li: a(href='/signin') 登录
+						li: a(href='/signup') 注册
+		.container-fluid
+			.row
+				.col-md-8
+					each blog in blogs
+						.sep-div(style='height: 10px;')
+						.container
+							.row
+								.col-md-3
+									a.avatar(href='/user?id=#{blog.authorId._id}')
+										img.avatar(src='/images/'+ author.avatar)
+								.col-md-6
+									.blog-frame
+										h3.title: a(href='/blog/#{blog._id}') #{blog.title}
+										p.content #{blog.content}
+										.footer-tag
+											span.tag.left #{blog.createAt}
+											span.tag.right 留言(#{blog.commentCount})
+											span.tag.right 浏览(#{blog.pv})
+				.col-md-4
+					h3 昵称: &nbsp;
+						span.italic #{author.username}
+					h3 性别: &nbsp;
+						span.italic #{({m: '男', f: '女', s: '保密'})[author.sex]}
+					h3 个人简介: &nbsp;
+						span #{author.bio}
+		.footer-div(style='height: 100px;')
+		include ./partials/footer
